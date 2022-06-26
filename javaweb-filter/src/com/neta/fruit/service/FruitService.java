@@ -1,0 +1,26 @@
+package com.neta.fruit.service;
+
+import com.neta.fruit.pojo.Fruit;
+
+import java.util.List;
+
+public interface FruitService {
+    // 获取指定页面的库存列表信息
+    List<Fruit> getFruitList(Integer pageNo,String keyword);
+
+    // 添加库存记录信息
+    void addFruit(Fruit fruit);
+
+    // 根据 id 查看指定库存记录
+    Fruit getFruitById(Integer fid);
+
+    // 删除特定库存记录
+    void delFruit(Integer fid);
+
+    // 获取总页数
+    Integer getPageCount(String keyword);
+
+    // 修改特定库存记录
+    void updateFruit(Fruit fruit);
+
+}

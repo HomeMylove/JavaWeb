@@ -1,9 +1,9 @@
 package com.neta.myssm.myspringmvc;
 
 import com.neta.myssm.ioc.BeanFactory;
-import com.neta.myssm.ioc.ClassPathXmlApplicationContext;
 import com.neta.myssm.util.StringUtil;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +25,15 @@ public class DispatcherServlet extends ViewBaseServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        beanFactory = new ClassPathXmlApplicationContext();
+//        beanFactory = new ClassPathXmlApplicationContext();
+        ServletContext servletContext = getServletContext();
+
+        Object beanFactoryObj =  servletContext.getAttribute("beanFactory");
+        if(beanFactoryObj != null){
+            beanFactory = (BeanFactory) beanFactoryObj;
+        }else {
+            throw new RuntimeException("BeanFactory 获取失败");
+        }
     }
 
     @Override
@@ -85,7 +93,8 @@ public class DispatcherServlet extends ViewBaseServlet {
                 }
             }
         } catch (InvocationTargetException | IllegalAccessException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            throw new DispatcherServletException("Dispatcher Servlet Exception");
         }
     }
 }

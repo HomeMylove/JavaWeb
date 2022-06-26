@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE beans [
+        <!ELEMENT beans (bean*)>
+        <!ELEMENT bean (property*)>
+        <!ELEMENT property (#PCDATA)>
+
+        <!ATTLIST bean id ID #REQUIRED>
+        <!ATTLIST bean class CDATA #IMPLIED>
+        <!ATTLIST property name CDATA #IMPLIED>
+        <!ATTLIST property ref IDREF #IMPLIED>
+        ]>
+
+
+<beans>
+    <bean id="userBasicDAO" class="com.neta.qqzone.dao.impl.UserBasicDAOImpl"/>
+    <bean id="topicDAO" class="com.neta.qqzone.dao.impl.TopicDAOImpl"/>
+
+
+    <bean id="userService" class="com.neta.qqzone.service.impl.UserBasicServiceImpl">
+        <property name="userBasicDAO" ref="userBasicDAO"/>
+    </bean>
+
+    <bean id="topicService" class="com.neta.qqzone.service.impl.TopicServiceImpl">
+        <property name="topicDAO" ref="topicDAO"/>
+    </bean>
+
+    <!-- Controller -->
+    <bean id="user" class="com.neta.qqzone.controller.UserController">
+        <property name="userBasicService" ref="userService"/>
+        <property name="topicService" ref="topicService"/>
+    </bean>
+    <bean id="page" class="com.neta.myssm.myspringmvc.PageController"/>
+</beans>
