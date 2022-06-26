@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<beans>
+    <!--作用:  fruit 交给 FruitController 处理-->
+    <bean id="fruit" class="com.neta.fruit.controllers.FruitController"/>
+</beans>
+
+        <!--
+        html 超文本标记语言
+        xml 可扩展标记语言
+        html 是 xml 的子集
+
+        xml 包含三个部分
+        1) xml 声明
+        2) dtd 文件类型定义
+        3) xml 正文
+        -->

@@ -1,6 +1,5 @@
 package com.neta.fruit.dao;
 
-import com.neta.fruit.dao.impl.FruitDAOImpl;
 import com.neta.fruit.pojo.Fruit;
 
 import java.util.List;
