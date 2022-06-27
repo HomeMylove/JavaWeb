@@ -60,7 +60,7 @@ public abstract class BaseDAO<T> {
             if (insertFlag) {
                 psmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             } else {
-                psmt = conn.prepareStatement(sql);
+                psmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             }
             setParams(psmt, params);
 
@@ -152,7 +152,8 @@ public abstract class BaseDAO<T> {
     protected T load(String sql, Object... params) {
         try {
             conn = getConn();
-            psmt = conn.prepareStatement(sql);
+//            psmt = conn.prepareStatement(sql);
+            psmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             setParams(psmt, params);
             rs = psmt.executeQuery();
 
