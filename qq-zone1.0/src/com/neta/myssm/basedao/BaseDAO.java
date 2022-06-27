@@ -109,7 +109,9 @@ public abstract class BaseDAO<T> {
                 || "java.lang.String".equals(typename)
                 || "java.util.Date".equals(typename)
                 || "java.time.LocalDateTime".equals(typename)
-                || "java.sql.Date".equals(typename);
+                || "java.sql.Date".equals(typename)
+                || "java.lang.Double".equals(typename);
+
     }
 
 
