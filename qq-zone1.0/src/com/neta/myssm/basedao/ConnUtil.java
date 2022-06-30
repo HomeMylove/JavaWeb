@@ -1,29 +1,71 @@
 package com.neta.myssm.basedao;
 
+import com.alibaba.druid.pool.DruidDataSourceFactory;
+
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class ConnUtil {
     private static final ThreadLocal<Connection> threadLocal = new ThreadLocal<>();
-    public static final String DRIVER = "com.mysql.cj.jdbc.Driver" ;
-    public static final String URL = "jdbc:mysql://localhost:3306/qqzonedb?useUnicode=true&characterEncoding=utf-8&useSSL=false";
-    public static final String USER = "root";
-    public static final String PWD = "neta520" ;
 
-    private static Connection createConn(){
+    /*
+    public static String DRIVER;
+    public static String URL;
+    public static String USER;
+    public static String PWD;
+    */
+
+    private static Properties properties;
+
+    static {
+        InputStream resource = ConnUtil.class.getClassLoader().getResourceAsStream("jdbc.properties");
+        properties = new Properties();
+
         try {
-            Class.forName(DRIVER);
-            return DriverManager.getConnection(URL, USER, PWD);
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+            properties.load(resource);
+
+            /*
+            DRIVER = properties.getProperty("jdbc.driver");
+            URL = properties.getProperty("jdbc.url");
+            USER = properties.getProperty("jdbc.user");
+            PWD = properties.getProperty("jdbc.pwd");
+
+             */
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        return null ;
     }
 
-    public static Connection getConn(){
+
+    private static Connection createConn() {
+        try {
+//            DruidDataSource druidDataSource = new DruidDataSource();
+            DataSource dataSource = DruidDataSourceFactory.createDataSource(properties);
+
+            /*
+            druidDataSource.setDriverClassName(DRIVER);
+            druidDataSource.setUrl(URL);
+            druidDataSource.setPassword(PWD);
+            druidDataSource.setUsername(USER);
+             */
+//            Class.forName(DRIVER);
+//            return DriverManager.getConnection(URL, USER, PWD);
+            return dataSource.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    public static Connection getConn() {
         Connection conn = threadLocal.get();
-        if(conn == null ){
+        if (conn == null) {
             conn = createConn();
             assert conn != null;
             threadLocal.set(conn);
@@ -35,10 +77,10 @@ public class ConnUtil {
     // 移除
     public static void closeConn() throws SQLException {
         Connection conn = threadLocal.get();
-        if(conn == null ){
+        if (conn == null) {
             return;
         }
-        if(!conn.isClosed()){
+        if (!conn.isClosed()) {
             conn.close();
             threadLocal.set(null);
         }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE beans [
+        <!ELEMENT beans (bean*)>
+        <!ELEMENT bean (property*)>
+        <!ELEMENT property (#PCDATA)>
+
+        <!ATTLIST bean id ID #REQUIRED>
+        <!ATTLIST bean class CDATA #IMPLIED>
+        <!ATTLIST property name CDATA #IMPLIED>
+        <!ATTLIST property ref IDREF #IMPLIED>
+        ]>
+
+
+<beans>
+    <!-- dao -->
+    <bean id="userDAO" class="com.neta.book.dao.impl.UserDAOImpl"/>
+    <bean id="bookDAO" class="com.neta.book.dao.impl.BookDAOImpl"/>
+    <bean id="cartItemDAO" class="com.neta.book.dao.impl.CartItemDAOImpl"/>
+
+    <!-- service  -->
+    <bean id="userService" class="com.neta.book.service.impl.UserServiceImpl">
+        <property name="userDAO" ref="userDAO"/>
+    </bean>
+    <bean id="bookService" class="com.neta.book.service.impl.BookServiceImpl">
+        <property name="bookDAO" ref="bookDAO"/>
+    </bean>
+    <bean id="cartItemService" class="com.neta.book.service.impl.CartItemServiceImpl">
+        <property name="cartItemDAO" ref="cartItemDAO"/>
+    </bean>
+
+
+    <!-- Controller -->
+    <bean id="page" class="com.neta.myssm.myspringmvc.PageController"/>
+    <bean id="user" class="com.neta.book.controllers.UserController">
+        <property name="userService" ref="userService"/>
+        <property name="cartItemService" ref="cartItemService"/>
+    </bean>
+    <bean id="book" class="com.neta.book.controllers.BookController">
+        <property name="bookService" ref="bookService"/>
+    </bean>
+    <bean id="cart" class="com.neta.book.controllers.CartController">
+        <property name="cartItemService" ref="cartItemService"/>
+    </bean>
+</beans>
